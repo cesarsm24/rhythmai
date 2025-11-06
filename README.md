@@ -67,11 +67,20 @@ pip install -r requirements.txt
 ```
 
 ### 3️⃣ Configurar variables de entorno
-Crea un archivo .env en la raíz del proyecto con tus credenciales de Spotify:
+Antes de ejecutar la aplicación, crea un archivo .env en la raíz del proyecto y define tus credenciales y rutas de configuración:
 ```bash
-SPOTIPY_CLIENT_ID=tu_client_id
-SPOTIPY_CLIENT_SECRET=tu_client_secret
+# Spotify API
+SPOTIPY_CLIENT_ID=tu_client_id_aqui
+SPOTIPY_CLIENT_SECRET=tu_client_secret_aqui
 SPOTIPY_REDIRECT_URI=http://localhost:8888/callback
+
+# Rutas locales
+CHROMA_DB_PATH=./chroma_db
+MEMORY_PATH=./memory
+
+# Configuración de memoria
+MAX_CONVERSATION_HISTORY=50
+MEMORY_WINDOW=10
 ```
 ---
 
@@ -148,6 +157,7 @@ numpy==1.26.3
 
 Este proyecto se distribuye bajo la [licencia MIT](./LICENSE).
 Eres libre de usarlo, modificarlo y compartirlo con atribución.
+
 
 
 
