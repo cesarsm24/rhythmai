@@ -136,7 +136,7 @@ numpy==1.26.3
 | Autor | GitHub |
 |:------|:------:|
 | **César Sánchez Montes** | [![GitHub](https://img.shields.io/badge/GitHub-cesarsm24-181717?style=flat&logo=github)](https://github.com/cesarsm24) |
-| **Miguel Ángel Campón Iglesias** | [![GitHub](https://img.shields.io/badge/GitHub-miguelcampon-181717?style=flat&logo=github)](https://github.com/miguelit011) |
+| **Miguel Ángel Campón Iglesias** | [![GitHub](https://img.shields.io/badge/GitHub-miguelit011-181717?style=flat&logo=github)](https://github.com/miguelit011) |
 | **Nicolás Benito Benito** | [![GitHub](https://img.shields.io/badge/GitHub-nicolasbenito-181717?style=flat&logo=github)](https://github.com/nicolasbenito) |
 
 </div>
@@ -147,4 +147,5 @@ numpy==1.26.3
 
 Este proyecto se distribuye bajo la [licencia MIT](./LICENSE).
 Eres libre de usarlo, modificarlo y compartirlo con atribución.
+
 
