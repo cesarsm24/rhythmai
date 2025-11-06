@@ -20,6 +20,7 @@
 ## 🧠 Funcionalidad principal
 
 **RhythmAI** es un DJ virtual impulsado por inteligencia artificial que recomienda canciones según tu **estado emocional** o tu **contexto**.  
+
 Usa **embeddings semánticos**, **bases de datos vectoriales (Chroma)** y la **API de Spotify** para ofrecerte música que encaje contigo, ya sea para **estudiar, relajarte o motivarte**.  
 
 ---
@@ -147,5 +148,6 @@ numpy==1.26.3
 
 Este proyecto se distribuye bajo la [licencia MIT](./LICENSE).
 Eres libre de usarlo, modificarlo y compartirlo con atribución.
+
 
 
