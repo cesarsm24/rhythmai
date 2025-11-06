@@ -1,0 +1,21 @@
+# Core
+spotipy==2.23.0
+python-dotenv==1.0.0
+streamlit==1.30.0
+
+# AI/ML
+sentence-transformers==2.3.1
+transformers==4.36.0
+torch==2.1.2
+
+# LangChain moderno
+langchain==1.0.3
+langchain-core==1.0.3
+langchain-community==1.0.0a1
+
+# Base de datos vectorial
+chromadb==0.4.22
+
+# Utilidades
+pandas==2.1.4
+numpy==1.26.3
