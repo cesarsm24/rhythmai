@@ -55,7 +55,7 @@ Usa **embeddings semánticos**, **bases de datos vectoriales (Chroma)** y la **A
 
 ### 1️⃣ Clonar el repositorio
 ```bash
-git clone https://github.com/cesarsm/rhythmai.git
+git clone https://github.com/cesarsm24/rhythmai.git
 cd RhythmAI
 ```
 
@@ -157,6 +157,7 @@ numpy==1.26.3
 
 Este proyecto se distribuye bajo la [licencia MIT](./LICENSE).
 Eres libre de usarlo, modificarlo y compartirlo con atribución.
+
 
 
 
