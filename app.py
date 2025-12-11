@@ -181,12 +181,18 @@ st.markdown("""
     }
 
     .stTextArea textarea {
-        border: 2px solid #e2e8f0;
+        border: 2px solid var(--secondary-background-color, #e2e8f0);
         border-radius: 10px;
         padding: 1rem;
         font-size: 0.95rem;
         transition: all 0.3s ease;
-        background: #ffffff;
+        background: var(--background-color, #ffffff);
+        color: var(--text-color, #0f172a);
+    }
+
+    .stTextArea textarea::placeholder {
+        color: var(--text-color, #0f172a);
+        opacity: 0.6;
     }
 
     .stTextArea textarea:focus {

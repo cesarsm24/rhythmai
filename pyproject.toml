@@ -44,6 +44,8 @@ dependencies = [
     "cryptography>=41.0.7",
     "pydantic>=2.5.3",
     "requests>=2.31.0",
+    "onnxruntime>=1.16.0",
+    "sentencepiece>=0.1.99",
 ]
 
 [project.optional-dependencies]
