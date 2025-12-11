@@ -1,0 +1,27 @@
+# ========================================
+# RHYTHMAI - Development Dependencies
+# Testing, Linting, Type Checking
+# ========================================
+
+# Testing Framework
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+pytest-asyncio==0.21.1
+
+# Code Quality
+black==23.12.1           # Code formatting
+pylint==3.0.3            # Linting
+flake8==7.0.0            # Style guide enforcement
+mypy==1.7.1              # Static type checking
+isort==5.13.2            # Import sorting
+
+# Documentation
+sphinx==7.2.6            # Documentation generation
+sphinx-rtd-theme==2.0.0  # ReadTheDocs theme
+myst-parser==2.0.0       # Markdown support for Sphinx
+
+# Development Tools
+ipython==8.19.0          # Enhanced Python shell
+jupyter==1.0.0           # Jupyter notebooks
+pre-commit==3.6.0        # Git hooks

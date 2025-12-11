@@ -1,21 +1,27 @@
-# Core
-spotipy==2.23.0
+# Core Dependencies
 python-dotenv==1.0.0
 streamlit==1.30.0
+requests==2.31.0
 
-# AI/ML
+# AI/ML Stack - Embeddings and NLP
 sentence-transformers==2.3.1
-transformers==4.36.0
+transformers==4.36.2
 torch==2.1.2
+tokenizers==0.15.0
+numpy==1.26.4
+scikit-learn==1.3.2
+sentencepiece==0.1.99
 
-# LangChain
-langchain==1.0.3
-langchain-core==1.0.3
-langchain-community==1.0.0a1
-
-# Base de datos vectorial
+# Vector Stores - Similarity Search
 chromadb==0.4.22
+hnswlib==0.7.0
+pyarrow==14.0.1
+faiss-cpu==1.7.4
 
-# Utilidades
+# Data Processing
 pandas==2.1.4
-numpy==1.26.3
+tqdm==4.66.1
+
+# Security and Validation
+cryptography==41.0.7
+pydantic==2.5.3

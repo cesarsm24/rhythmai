@@ -3,33 +3,131 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.pyc
 .Python
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Entornos virtuales
 .venv
 env/
 venv/
 ENV/
+env.bak/
+venv.bak/
 
-# Conda
-*.egg-info/
+# Pytest
+.pytest_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
 
-# Archivos sensibles
+# Archivos sensibles y configuración
 .env
+.env.local
+.env.*.local
 .spotify_cache
+*.key
+*.pem
+secrets.json
 
-# Bases de datos y memoria
+# Bases de datos y almacenamiento
 chroma_db/
+faiss_db/
 memory/
 *.db
+*.sqlite
+*.sqlite3
 
-# IDE
+# Archivos cifrados (sistema de seguridad)
+*.enc
+*.secure
+memory/secure/
+
+# Modelos y cache de ML
+.cache/
+.transformers_cache/
+models/
+*.bin
+*.pt
+*.pth
+*.ckpt
+!requirements*.txt
+
+# IDE y editores
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+.project
+.pydevproject
+.settings/
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
-# Logs
+# Logs y debugging
 *.log
+logs/
+*.log.*
+debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Documentación generada
+docs/_build/
+docs/.doctrees/
+site/
+
+# Archivos temporales
+*.tmp
+*.temp
+*.bak
+*.backup
+tmp/
+temp/
+
+# Archivos de prueba locales
+test_output/
+test_data/
+*.test
+
+# Datos sensibles del usuario
+user_data/
+uploads/
+downloads/
+
+# Archivos de Streamlit
+.streamlit/secrets.toml
