@@ -21,7 +21,15 @@ class BaseVectorStore(ABC):
         Añade canciones a la base de datos
 
         Args:
-            songs (list): Lista de diccionarios con información de canciones
+            songs (list): Lista de diccionarios con información de canciones:
+                - id: Identificador único
+                - name: Nombre de la canción
+                - artist: Artista
+                - description: Descripción o mood
+                - genre: Género musical
+                - url: URL de la plataforma
+                - album_image: URL de la portada del álbum
+                - preview_url: URL del preview de audio
             embeddings (np.ndarray): Array de embeddings (n_songs × dimension)
         """
         pass

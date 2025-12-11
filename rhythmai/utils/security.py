@@ -360,7 +360,7 @@ if __name__ == "__main__":
     print("Test 2: Cifrado de Diccionarios")
     user_data = {
         "user_id": "user123",
-        "spotify_token": "BQD8F3xKJ...",
+        "music_token": "BQD8F3xKJ...",
         "preferences": {
             "favorite_genre": "electronic",
             "privacy_level": "high"

@@ -26,6 +26,7 @@ class Config:
     # Modelos de IA (Hugging Face)
     EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
     EMOTION_MODEL = os.getenv("EMOTION_MODEL", "cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual")
+    EMBEDDING_DIMENSION = 384  # Dimensión de embeddings del modelo all-MiniLM-L6-v2
 
     BASE_DIR = Path(__file__).parent.parent
     CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", str(BASE_DIR / "chroma_db"))
@@ -43,7 +44,7 @@ class Config:
 
     USE_GPU = os.getenv("USE_GPU", "false").lower() == "true"
 
-    RHYTHM_MASTER_KEY = os.getenv("RHYTHM_MASTER_KEY", "default_key_change_in_production")
+    RHYTHM_MASTER_KEY = os.getenv("RHYTHM_MASTER_KEY", "default_master_key_change_in_production")
 
     @classmethod
     def validate(cls):
@@ -76,7 +77,7 @@ class Config:
         print(f"  Vector Store: {cls.VECTOR_STORE.upper()}")
         print(f"  Modelo de embeddings: {cls.EMBEDDING_MODEL}")
         print(f"  Modelo emocional: {cls.EMOTION_MODEL}")
-        print(f"  Dimensión de embeddings: 384")
+        print(f"  Dimensión de embeddings: {cls.EMBEDDING_DIMENSION}")
         print(f"  GPU: {'Habilitada' if cls.USE_GPU else 'Deshabilitada (CPU)'}")
         print(f"  Ruta de base de datos: {cls.CHROMA_DB_PATH if cls.VECTOR_STORE == 'chroma' else cls.FAISS_DB_PATH}")
         print(f"  Ruta de memoria: {cls.MEMORY_PATH}")

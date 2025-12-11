@@ -5,6 +5,9 @@ Utiliza embeddings para comprender el contexto sin depender de listas de palabra
 
 import logging
 import re
+import pickle
+import hashlib
+from pathlib import Path
 from transformers import pipeline
 from sentence_transformers import SentenceTransformer, util
 
@@ -23,9 +26,13 @@ class EmotionAnalyzer:
     3. Clasificación basada en similitud semántica sin listas hardcodeadas
     """
 
-    def __init__(self):
+    def __init__(self, embedder=None):
         """
         Inicializa los modelos de análisis emocional.
+
+        Args:
+            embedder: Instancia de SentenceTransformer para reutilizar.
+                     Si es None, se crea una nueva instancia.
 
         Raises:
             RuntimeError: Si no se pueden cargar los modelos requeridos.
@@ -34,16 +41,22 @@ class EmotionAnalyzer:
 
         try:
             # Inicializar modelo de análisis de sentimientos
+            # Configurar device según Config.USE_GPU: -1 para CPU, 0 para GPU
+            device = 0 if Config.USE_GPU else -1
             self.sentiment_pipeline = pipeline(
                 "sentiment-analysis",
                 model=Config.EMOTION_MODEL,
-                device=-1,
+                device=device,
                 top_k=None
             )
 
-            # Inicializar modelo de embeddings para análisis semántico
-            logger.info("Cargando modelo de embeddings semánticos...")
-            self.embedder = SentenceTransformer(Config.EMBEDDING_MODEL)
+            # Reutilizar embedder existente o crear uno nuevo
+            if embedder is not None:
+                logger.info("Reutilizando instancia existente de embedder")
+                self.embedder = embedder
+            else:
+                logger.info("Cargando nuevo modelo de embeddings semánticos...")
+                self.embedder = SentenceTransformer(Config.EMBEDDING_MODEL)
 
             # Construir prototipos de actividades mediante embeddings
             self.activity_prototypes = self._build_prototypes({
@@ -125,12 +138,32 @@ class EmotionAnalyzer:
         Genera variaciones mediante plantillas de lenguaje natural para crear
         un prototipo semántico robusto sin necesidad de enumerar todas las variantes manualmente.
 
+        Usa cache en disco para evitar regenerar prototipos en cada inicialización.
+
         Args:
             keyword_groups (dict): Diccionario de categoría a lista de palabras clave.
 
         Returns:
             dict: Prototipos representados como embeddings promediados.
         """
+        # Generar hash único basado en keyword_groups y modelo de embeddings
+        cache_key = self._generate_cache_key(keyword_groups)
+        cache_dir = Path(Config.DATA_PATH) / ".cache"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_file = cache_dir / f"prototypes_{cache_key}.pkl"
+
+        # Intentar cargar desde cache
+        if cache_file.exists():
+            try:
+                with open(cache_file, 'rb') as f:
+                    prototypes = pickle.load(f)
+                logger.info(f"Prototipos cargados desde cache: {cache_file.name}")
+                return prototypes
+            except Exception as e:
+                logger.warning(f"Error cargando cache, regenerando prototipos: {e}")
+
+        # Si no hay cache, generar prototipos
+        logger.info("Generando prototipos de emociones (esto puede tardar 5-10 segundos)...")
         prototypes = {}
 
         # Plantillas para generar variaciones automáticas de contexto
@@ -163,7 +196,45 @@ class EmotionAnalyzer:
 
             prototypes[category] = prototype
 
+        # Guardar en cache
+        try:
+            with open(cache_file, 'wb') as f:
+                pickle.dump(prototypes, f)
+            logger.info(f"Prototipos guardados en cache: {cache_file.name}")
+        except Exception as e:
+            logger.warning(f"No se pudo guardar cache: {e}")
+
         return prototypes
+
+    def _generate_cache_key(self, keyword_groups):
+        """
+        Genera un hash único para identificar los prototipos.
+
+        Args:
+            keyword_groups (dict): Diccionario de categoría a lista de palabras clave.
+
+        Returns:
+            str: Hash MD5 de 8 caracteres.
+        """
+        # Crear string determinista de keyword_groups y modelo
+        content = f"{Config.EMBEDDING_MODEL}_{sorted(keyword_groups.items())}"
+        hash_obj = hashlib.md5(content.encode())
+        return hash_obj.hexdigest()[:8]
+
+    def get_default_emotion_response(self, confidence=0.50):
+        """
+        Retorna una respuesta emocional por defecto (neutral).
+
+        Método público para obtener una respuesta emocional neutral por defecto
+        sin necesidad de acceder a métodos privados internos.
+
+        Args:
+            confidence (float): Nivel de confianza del análisis por defecto.
+
+        Returns:
+            dict: Respuesta emocional con estado neutral.
+        """
+        return self._build_emotion_response('neutral', confidence=confidence)
 
     def analyze(self, text):
         """
@@ -174,7 +245,7 @@ class EmotionAnalyzer:
 
         Returns:
             dict: Diccionario con análisis emocional completo incluyendo emoción dominante,
-                  géneros sugeridos y parámetros para Spotify.
+                  géneros sugeridos y parámetros de audio.
         """
         if not text or not text.strip():
             return self._build_emotion_response('neutral', confidence=0.50)
@@ -431,7 +502,7 @@ class EmotionAnalyzer:
 
         Returns:
             dict: Respuesta estructurada con emoción, géneros sugeridos, dimensiones
-                  y parámetros para Spotify.
+                  y parámetros de audio.
         """
         # Mapeo de emociones a géneros musicales
         emotion_to_genres = {
@@ -490,7 +561,7 @@ class EmotionAnalyzer:
             'dominant_score': confidence,
             'suggested_genres': emotion_to_genres.get(emotion, ['pop']),
             'dimensions': dimensions,
-            'spotify_params': {
+            'music_params': {
                 'target_valence': dimensions['valence'],
                 'target_energy': dimensions['energy']
             }

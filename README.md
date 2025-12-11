@@ -53,7 +53,7 @@ User Input → Emotion Analysis → Vectorization → Semantic Search → Recomm
 ```
 
 1. 🗣️ **User describes their emotional state** (natural language)
-2. 🧠 **AI analyzes emotions** using RoBERTa transformer (28 emotion categories)
+2. 🧠 **AI analyzes sentiment & emotions** using multilingual XLM-RoBERTa + semantic similarity
 3. 🔢 **Text vectorization** with Sentence-BERT (384-dimensional embeddings)
 4. 🔍 **Semantic similarity search** in ChromaDB/FAISS vector database
 5. 🎵 **Music recommendations** from local vector database
@@ -64,9 +64,9 @@ User Input → Emotion Analysis → Vectorization → Semantic Search → Recomm
 ## ✨ Features
 
 ### 🎭 Advanced Emotion Analysis
-- **28 Emotion Categories**: Joy, sadness, anger, fear, excitement, optimism, and more
+- **Hybrid Detection**: Multilingual sentiment analysis + semantic similarity mapping
 - **Confidence Scoring**: Each emotion detection includes confidence percentage
-- **Multi-Emotion Detection**: Recognizes complex emotional states
+- **Multi-Emotion Detection**: Recognizes complex emotional states through embeddings
 - **Energy & Valence Dimensions**: Quantifies musical mood on two axes (0-1 scale)
 
 ### 🔍 Vector Database & Semantic Search
@@ -134,8 +134,8 @@ User Input → Emotion Analysis → Vectorization → Semantic Search → Recomm
 │Emotion  │ │ Embedding │ │  Vector DB  │ │ Deezer  │ │  Security │
 │Analyzer │ │   Model   │ │  (ChromaDB) │ │   API   │ │  Module   │
 │         │ │           │ │             │ │         │ │           │
-│RoBERTa  │ │Sentence-  │ │ HNSW Index  │ │ Web API │ │  AES-256  │
-│GoEmotions│ │BERT       │ │ Cosine Sim  │ │ Client  │ │  PBKDF2   │
+│XLM-     │ │Sentence-  │ │ HNSW Index  │ │ Web API │ │  AES-256  │
+│RoBERTa  │ │BERT       │ │ Cosine Sim  │ │ Client  │ │  PBKDF2   │
 └─────────┘ └───────────┘ └─────────────┘ └─────────┘ └───────────┘
       │            │              │                │           │
       └────────────┴──────────────┴────────────────┴───────────┘
@@ -274,7 +274,7 @@ pip install -r requirements.txt
 
 **First-time installation** will download AI models (~1GB):
 - `sentence-transformers/all-MiniLM-L6-v2` (80MB)
-- `SamLowe/roberta-base-go_emotions` (500MB)
+- `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` (560MB)
 
 ### Step 4: Configure Environment
 
@@ -288,7 +288,7 @@ FAISS_DB_PATH=./faiss_db
 
 # AI Models
 EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-EMOTION_MODEL=SamLowe/roberta-base-go_emotions
+EMOTION_MODEL=cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual
 
 # Memory Configuration
 MEMORY_PATH=./memory
@@ -326,7 +326,7 @@ This script will:
 | `CHROMA_DB_PATH` | ChromaDB storage path | `./chroma_db` |
 | `FAISS_DB_PATH` | FAISS storage path | `./faiss_db` |
 | `EMBEDDING_MODEL` | Sentence transformer model | `sentence-transformers/all-MiniLM-L6-v2` |
-| `EMOTION_MODEL` | Emotion analysis model | `SamLowe/roberta-base-go_emotions` |
+| `EMOTION_MODEL` | Emotion analysis model | `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` |
 | `MEMORY_PATH` | User memory path | `./memory` |
 | `MAX_CONVERSATION_HISTORY` | Max stored conversations | `50` |
 | `MEMORY_WINDOW` | Context window size | `10` |
@@ -475,18 +475,6 @@ pytest --cov=rhythmai
 flake8 rhythmai && black --check rhythmai && pytest --cov=rhythmai
 ```
 
-### CI/CD
-
-Tests run automatically via GitHub Actions on:
-- Push to `main` or `develop` branches
-- Pull requests to `main` or `develop`
-
-The CI pipeline includes:
-- Linting (flake8, black, isort)
-- Unit tests across Python 3.9, 3.10, 3.11
-- Integration tests
-- Coverage reporting
-
 ---
 
 ## 🔐 Security
@@ -599,7 +587,7 @@ Generate personalized music recommendations.
         'suggested_genres': List[str],     # Recommended genres
         'context': List[str]               # Detected contexts
     },
-    'spotify_recommendations': List[Dict], # Spotify tracks
+    'music_recommendations': List[Dict],   # Music tracks
     'vector_results': List[Dict],          # Vector DB matches
     'context_playlists': List[Dict],       # Contextual playlists
     'explanation': str,                    # Natural language explanation
@@ -646,7 +634,7 @@ Semantic similarity search.
         'artist': str,                # Artist name
         'genre': str,                 # Genre
         'description': str,           # Mood description
-        'url': str,                   # Spotify URL
+        'url': str,                   # Music platform URL
         'similarity': float,          # Similarity score (0-1)
         'distance': float             # Cosine distance
     },
@@ -703,7 +691,7 @@ rhythmai/
 │   ├── core/                           # Core AI/ML modules
 │   │   ├── __init__.py
 │   │   ├── embeddings.py               # Sentence-BERT embeddings
-│   │   ├── emotion_analyzer.py         # RoBERTa emotion detection
+│   │   ├── emotion_analyzer.py         # XLM-RoBERTa sentiment analysis
 │   │   ├── music_recommender.py        # Main orchestrator
 │   │   └── deezer_client.py            # Deezer API wrapper
 │   │
@@ -759,7 +747,7 @@ rhythmai/
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| **Transformers** | 4.36.2 | Emotion analysis with RoBERTa |
+| **Transformers** | 4.36.2 | Sentiment analysis with XLM-RoBERTa |
 | **Sentence-Transformers** | 2.3.1 | Text embeddings (384D) |
 | **PyTorch** | 2.1.2 | Deep learning backend |
 | **NumPy** | 1.26.4 | Numerical computing |

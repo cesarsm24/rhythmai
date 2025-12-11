@@ -19,9 +19,7 @@ pyarrow==14.0.1
 faiss-cpu==1.7.4
 
 # Data Processing
-pandas==2.1.4
 tqdm==4.66.1
 
-# Security and Validation
+# Security
 cryptography==41.0.7
-pydantic==2.5.3

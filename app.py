@@ -559,10 +559,6 @@ if recommend_button:
                     st.markdown(f"### {idx}. {t.get('name', 'Canción Desconocida')}")
                     st.markdown(f"**<i class='fa-solid fa-user icon'></i>Artista:** {t.get('artist', 'Artista Desconocido')}", unsafe_allow_html=True)
 
-                    album_name = t.get("album_name")
-                    if album_name and album_name != "None":
-                        st.markdown(f"**<i class='fa-solid fa-compact-disc icon'></i>Álbum:** {album_name}", unsafe_allow_html=True)
-
                     # Mostrar género si está disponible
                     genre = t.get("genre")
                     if genre and genre != "unknown":

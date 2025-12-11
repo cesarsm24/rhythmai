@@ -6,6 +6,7 @@ para generación de recomendaciones musicales personalizadas.
 """
 
 import logging
+import random
 
 from rhythmai.core.deezer_client import DeezerClient
 from rhythmai.core.embeddings import EmbeddingModel
@@ -38,7 +39,8 @@ class MusicRecommender:
 
             self.deezer = DeezerClient()
             self.embedder = EmbeddingModel()
-            self.emotion_analyzer = EmotionAnalyzer()
+            # Pasar el modelo embedder para reutilizar y evitar carga duplicada en memoria
+            self.emotion_analyzer = EmotionAnalyzer(embedder=self.embedder.model)
             self.vector_store = get_vector_store()
 
             from rhythmai.memory.context_manager import ContextManager
@@ -70,9 +72,9 @@ class MusicRecommender:
         Returns:
             dict: Diccionario con las siguientes claves:
                 - emotion_analysis: Análisis emocional completo
-                - spotify_recommendations: Lista vacía (compatibilidad)
+                - music_recommendations: Recomendaciones musicales
                 - vector_results: Resultados de búsqueda vectorial local
-                - context_playlists: Lista vacía (compatibilidad)
+                - context_playlists: Listas de reproducción contextuales
                 - explanation: Explicación simple de las recomendaciones
                 - enriched_context: Contexto enriquecido del usuario
         """
@@ -83,7 +85,7 @@ class MusicRecommender:
 
         if not emotion_data or "dimensions" not in emotion_data:
             logger.error("Estructura de emotion_data inválida, usando respuesta neutral")
-            emotion_data = self.emotion_analyzer._build_emotion_response('neutral', confidence=0.50)
+            emotion_data = self.emotion_analyzer.get_default_emotion_response(confidence=0.50)
 
         logger.info(
             f"Emoción dominante detectada: {emotion_data['dominant_emotion']} "
@@ -155,7 +157,6 @@ class MusicRecommender:
 
                 # Aplicar randomización si está activada
                 if randomize and len(vector_results) > n_results:
-                    import random
                     # Mantener resultados más relevantes y randomizar el resto
                     top_results = vector_results[:n_results // 2]
                     remaining = vector_results[n_results // 2:]
@@ -170,9 +171,6 @@ class MusicRecommender:
                 import traceback
                 logger.error(traceback.format_exc())
 
-        deezer_recs = []
-        logger.info("Búsqueda en servicios externos desactivada, solo resultados locales")
-
         explanation = self._generate_simple_explanation(emotion_data)
 
         # Registrar interacción en el contexto del usuario
@@ -186,7 +184,7 @@ class MusicRecommender:
 
         return {
             "emotion_analysis": emotion_data,
-            "spotify_recommendations": deezer_recs,
+            "music_recommendations": [],
             "vector_results": vector_results,
             "context_playlists": [],
             "explanation": explanation,
@@ -286,7 +284,7 @@ class MusicRecommender:
         Returns:
             dict: Parámetros ajustados para la recomendación.
         """
-        params = emotion_data.get("spotify_params", {}).copy()
+        params = emotion_data.get("music_params", {}).copy()
         genres = emotion_data.get("suggested_genres", ["pop"]).copy()
 
         prefs = enriched_context.get("music_preferences", {})

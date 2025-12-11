@@ -71,7 +71,11 @@ class TestVectorStore:
         """
         Verifica el conteo de canciones en el vector store.
         """
+        # Limpiar primero para asegurar estado conocido
+        vector_store.clear_all()
+
         initial_count = vector_store.count()
+        assert initial_count == 0
 
         songs = [sample_song_data]
         embeddings = np.array([mock_embedding])

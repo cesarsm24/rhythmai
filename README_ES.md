@@ -53,7 +53,7 @@ Entrada Usuario → Análisis Emoción → Vectorización → Búsqueda Semánti
 ```
 
 1. 🗣️ **El usuario describe su estado emocional** (lenguaje natural)
-2. 🧠 **IA analiza emociones** usando transformer RoBERTa (28 categorías de emociones)
+2. 🧠 **IA analiza sentimiento y emociones** usando XLM-RoBERTa multilingüe + similitud semántica
 3. 🔢 **Vectorización de texto** con Sentence-BERT (embeddings de 384 dimensiones)
 4. 🔍 **Búsqueda de similitud semántica** en base de datos vectorial ChromaDB/FAISS
 5. 🎵 **Recomendaciones musicales** desde base de datos vectorial local
@@ -64,9 +64,9 @@ Entrada Usuario → Análisis Emoción → Vectorización → Búsqueda Semánti
 ## ✨ Características
 
 ### 🎭 Análisis Avanzado de Emociones
-- **28 Categorías de Emociones**: Alegría, tristeza, ira, miedo, entusiasmo, optimismo y más
+- **Detección Híbrida**: Análisis de sentimiento multilingüe + mapeo de similitud semántica
 - **Puntuación de Confianza**: Cada detección de emoción incluye porcentaje de confianza
-- **Detección Multi-Emocional**: Reconoce estados emocionales complejos
+- **Detección Multi-Emocional**: Reconoce estados emocionales complejos a través de embeddings
 - **Dimensiones de Energía y Valencia**: Cuantifica el estado de ánimo musical en dos ejes (escala 0-1)
 
 ### 🔍 Base de Datos Vectorial y Búsqueda Semántica
@@ -127,8 +127,8 @@ Entrada Usuario → Análisis Emoción → Vectorización → Búsqueda Semánti
 │Analizador│ │  Modelo   │ │   Base de   │ │ Deezer  │ │  Módulo   │
 │Emociones │ │ Embedding │ │  Datos Vec. │ │   API   │ │ Seguridad │
 │          │ │           │ │ (ChromaDB)  │ │         │ │           │
-│RoBERTa   │ │Sentence-  │ │ Índice HNSW │ │ Web API │ │  AES-256  │
-│GoEmotions│ │BERT       │ │ Sim. Coseno │ │ Client  │ │  PBKDF2   │
+│XLM-      │ │Sentence-  │ │ Índice HNSW │ │ Web API │ │  AES-256  │
+│RoBERTa   │ │BERT       │ │ Sim. Coseno │ │ Client  │ │  PBKDF2   │
 └─────────┘ └───────────┘ └─────────────┘ └─────────┘ └───────────┘
 ```
 
@@ -192,7 +192,7 @@ pip install -r requirements.txt
 
 **Primera instalación** descargará modelos de IA (~1GB):
 - `sentence-transformers/all-MiniLM-L6-v2` (80MB)
-- `SamLowe/roberta-base-go_emotions` (500MB)
+- `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` (560MB)
 
 ### Paso 4: Configurar Entorno
 
@@ -206,7 +206,7 @@ FAISS_DB_PATH=./faiss_db
 
 # Modelos de IA
 EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-EMOTION_MODEL=SamLowe/roberta-base-go_emotions
+EMOTION_MODEL=cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual
 
 # Configuración de Memoria
 MEMORY_PATH=./memory
@@ -244,7 +244,7 @@ Este script:
 | `CHROMA_DB_PATH` | Ruta de almacenamiento ChromaDB | `./chroma_db` |
 | `FAISS_DB_PATH` | Ruta de almacenamiento FAISS | `./faiss_db` |
 | `EMBEDDING_MODEL` | Modelo de sentence transformer | `sentence-transformers/all-MiniLM-L6-v2` |
-| `EMOTION_MODEL` | Modelo de análisis de emociones | `SamLowe/roberta-base-go_emotions` |
+| `EMOTION_MODEL` | Modelo de análisis de emociones | `cardiffnlp/twitter-xlm-roberta-base-sentiment-multilingual` |
 | `MEMORY_PATH` | Ruta de memoria de usuario | `./memory` |
 | `MAX_CONVERSATION_HISTORY` | Máx. conversaciones almacenadas | `50` |
 | `MEMORY_WINDOW` | Tamaño de ventana de contexto | `10` |
@@ -482,7 +482,7 @@ rhythmai/
 │   ├── core/                           # Módulos núcleo AI/ML
 │   │   ├── __init__.py
 │   │   ├── embeddings.py               # Embeddings Sentence-BERT
-│   │   ├── emotion_analyzer.py         # Detección de emociones RoBERTa
+│   │   ├── emotion_analyzer.py         # Análisis de sentimiento XLM-RoBERTa
 │   │   ├── music_recommender.py        # Orquestador principal
 │   │   └── deezer_client.py            # Wrapper API Deezer
 │   │
@@ -540,7 +540,7 @@ rhythmai/
 
 | Tecnología | Versión | Propósito |
 |------------|---------|-----------|
-| **Transformers** | 4.36.2 | Análisis de emociones con RoBERTa |
+| **Transformers** | 4.36.2 | Análisis de sentimiento con XLM-RoBERTa |
 | **Sentence-Transformers** | 2.3.1 | Embeddings de texto (384D) |
 | **PyTorch** | 2.1.2 | Backend de deep learning |
 | **NumPy** | 1.26.4 | Computación numérica |

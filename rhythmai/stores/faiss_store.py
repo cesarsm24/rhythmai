@@ -40,7 +40,7 @@ class FAISSStore(BaseVectorStore):
         id_to_idx (dict): Mapeo de IDs a índices en FAISS.
     """
 
-    def __init__(self, dimension=384, index_type="Flat"):
+    def __init__(self, dimension=None, index_type="Flat"):
         """
         Inicializa el vector store de FAISS.
 
@@ -53,7 +53,8 @@ class FAISSStore(BaseVectorStore):
             ValueError: Si el tipo de índice es inválido.
         """
         try:
-            self.dimension = dimension
+            # Usar dimensión de configuración si no se especifica
+            self.dimension = dimension if dimension is not None else Config.EMBEDDING_DIMENSION
             self.index_type = index_type
             self.db_path = Path(Config.FAISS_DB_PATH)
             self.db_path.mkdir(parents=True, exist_ok=True)
@@ -192,7 +193,6 @@ class FAISSStore(BaseVectorStore):
                     'description': song.get('description', ''),
                     'genre': song.get('genre', 'unknown'),
                     'url': song.get('url', ''),
-                    'album_name': song.get('album_name', ''),
                     'album_image': album_image if album_image else '',
                     'preview_url': preview_url if preview_url else ''
                 })
@@ -261,7 +261,6 @@ class FAISSStore(BaseVectorStore):
                     'description': metadata['description'],
                     'genre': metadata['genre'],
                     'url': metadata['url'],
-                    'album_name': metadata.get('album_name', ''),
                     'album_image': album_image if album_image else None,
                     'preview_url': preview_url if preview_url else None,
                     'distance': float(dist),

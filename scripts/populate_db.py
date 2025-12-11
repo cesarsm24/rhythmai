@@ -291,7 +291,7 @@ except Exception as e:
     sys.exit(1)
 
 # Validar dimensionalidad de embeddings
-expected_dims = 384
+expected_dims = Config.EMBEDDING_DIMENSION
 if final_embeddings.shape[1] != expected_dims:
     print(f"\nERROR: Dimensionalidad incorrecta.")
     print(f"   Esperado: {expected_dims} dimensiones")
