@@ -53,7 +53,7 @@ secrets.json
 # Bases de datos y almacenamiento
 chroma_db/
 faiss_db/
-memory/
+/memory/
 *.db
 *.sqlite
 *.sqlite3

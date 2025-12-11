@@ -26,12 +26,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 requires-python = ">=3.9"
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["rhythmai*"]
-exclude = ["tests*", "docs*", "examples*"]
-
 dependencies = [
     "python-dotenv>=1.0.0",
     "streamlit>=1.30.0",
@@ -66,6 +60,11 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/cesarsm24/rhythmai"
 Repository = "https://github.com/cesarsm24/rhythmai"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rhythmai*"]
+exclude = ["tests*", "docs*", "examples*"]
 
 [tool.black]
 line-length = 100
