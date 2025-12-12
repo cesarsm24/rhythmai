@@ -60,22 +60,24 @@ class TestVectorStoreBenchmark:
         ]
 
     @pytest.fixture
-    def chroma_store(self, tmp_path):
+    def chroma_store(self, tmp_path, request):
         """Instancia de ChromaDB para benchmarking."""
         import os
-        # Crear path único para cada test
-        chroma_path = str(tmp_path / 'chroma_bench')
+        # Crear path único para cada test usando el nombre del test
+        test_name = request.node.name
+        chroma_path = str(tmp_path / f'chroma_bench_{test_name}')
         os.environ['VECTOR_STORE'] = 'chroma'
         os.environ['CHROMA_DB_PATH'] = chroma_path
         store = get_vector_store()
         return store
 
     @pytest.fixture
-    def faiss_store(self, tmp_path):
+    def faiss_store(self, tmp_path, request):
         """Instancia de FAISS para benchmarking."""
         import os
-        # Crear path único para cada test
-        faiss_path = str(tmp_path / 'faiss_bench')
+        # Crear path único para cada test usando el nombre del test
+        test_name = request.node.name
+        faiss_path = str(tmp_path / f'faiss_bench_{test_name}')
         os.environ['VECTOR_STORE'] = 'faiss'
         os.environ['FAISS_DB_PATH'] = faiss_path
         store = get_vector_store()
