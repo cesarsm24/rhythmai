@@ -1,6 +1,6 @@
 # ========================================
 # RHYTHMAI - Development Dependencies
-# Testing and Code Quality
+# Testing
 # ========================================
 
 # Testing Framework
